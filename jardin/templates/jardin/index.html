@@ -1,0 +1,600 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jardín Botánico | Hacienda Teya</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --verde-teya: #2d5a27;
+            --verde-teya-oscuro: #1e3d1a;
+            --oro-teya: #c5a059;
+            --oro-teya-suave: rgba(197, 160, 89, 0.18);
+            --crema-teya: #fdfcf0;
+            --texto-oscuro: #2b2b2b;
+            --texto-suave: #5f5b52;
+            --blanco: #ffffff;
+            --sombra-suave: 0 10px 24px rgba(0, 0, 0, 0.06);
+            --sombra-media: 0 16px 34px rgba(0, 0, 0, 0.10);
+            --radio-card: 14px;
+            --transicion: all 0.30s ease;
+        }
+
+        body {
+            background-color: var(--crema-teya);
+            font-family: 'Georgia', serif;
+            color: var(--texto-oscuro);
+        }
+
+        .top-bar {
+            background: var(--verde-teya-oscuro);
+            color: white;
+            font-size: 14px;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .top-bar-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+            flex-wrap: wrap;
+        }
+
+        .top-item {
+            margin-right: 0;
+            line-height: 1.5;
+        }
+
+        .top-item a {
+            color: #b8f28f;
+            text-decoration: none;
+        }
+
+        .top-item a:hover {
+            text-decoration: underline;
+        }
+
+        .navbar {
+            background-color: var(--verde-teya);
+            border-bottom: 3px solid var(--oro-teya);
+            box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+        }
+
+        .navbar-brand {
+            font-size: 2rem;
+            letter-spacing: 1px;
+        }
+
+        .nav-link {
+            color: rgba(255,255,255,0.88) !important;
+            font-weight: 600;
+            transition: var(--transicion);
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #fff !important;
+        }
+
+        .hero {
+            position: relative;
+            min-height: 82vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            text-align: center;
+            color: white;
+            background: #1f1f1f;
+        }
+
+        .hero-media {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(rgba(0,0,0,0.56), rgba(0,0,0,0.52));
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 2rem;
+            max-width: 950px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.7rem, 6vw, 5.4rem);
+            font-weight: 700;
+            line-height: 1.08;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 16px rgba(0,0,0,0.22);
+        }
+
+        .hero p {
+            font-size: clamp(1.1rem, 2.3vw, 1.55rem);
+            max-width: 760px;
+            margin: 0 auto 1.8rem auto;
+            color: rgba(255,255,255,0.92);
+        }
+
+        .btn-ubicacion {
+            background-color: var(--oro-teya);
+            color: white;
+            padding: 14px 34px;
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 10px;
+            display: inline-block;
+            transition: var(--transicion);
+            border: 2px solid transparent;
+            box-shadow: 0 10px 22px rgba(0,0,0,0.18);
+            letter-spacing: 0.3px;
+        }
+
+        .btn-ubicacion:hover {
+            background-color: white;
+            color: var(--verde-teya);
+            border-color: var(--oro-teya);
+            transform: translateY(-2px);
+        }
+
+        .seccion-titulo {
+            color: var(--verde-teya);
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            margin-bottom: 1rem;
+        }
+
+        .bloque-presentacion {
+            background: white;
+            border: 1px solid rgba(197, 160, 89, 0.40);
+            border-radius: var(--radio-card);
+            overflow: hidden;
+            box-shadow: var(--sombra-suave);
+        }
+
+        .bloque-presentacion img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            min-height: 340px;
+        }
+
+        .bloque-presentacion p {
+            color: var(--texto-suave);
+            line-height: 1.75;
+        }
+
+        .card-jardin {
+            border: 1px solid rgba(197, 160, 89, 0.60);
+            background: white;
+            transition: var(--transicion);
+            border-radius: var(--radio-card);
+            overflow: hidden;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.04);
+            height: 100%;
+        }
+
+        .card-jardin:hover {
+            transform: translateY(-7px);
+            box-shadow: var(--sombra-media);
+        }
+
+        .card-media {
+            width: 100%;
+            height: 100%;
+            min-height: 300px;
+            object-fit: cover;
+            transition: transform 0.45s ease;
+        }
+
+        .card-jardin:hover .card-media {
+            transform: scale(1.04);
+        }
+
+        .card-placeholder {
+            min-height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f1f1ea;
+            color: #7a7a7a;
+            font-style: italic;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .etiqueta-area {
+            color: var(--oro-teya);
+            font-size: 0.88rem;
+            letter-spacing: 1.2px;
+            font-weight: 700;
+        }
+
+        .card-title {
+            color: var(--verde-teya);
+            line-height: 1.15;
+            font-size: 1.55rem;
+            font-weight: 700;
+        }
+
+        .card-text {
+            color: var(--texto-suave) !important;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .btn-teya {
+            background-color: var(--verde-teya);
+            color: white;
+            border-radius: 10px;
+            padding: 12px 20px;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            transition: var(--transicion);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+        }
+
+        .btn-teya:hover {
+            background-color: var(--oro-teya);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        footer {
+            background: #151515;
+            border-top: 3px solid rgba(197, 160, 89, 0.45);
+        }
+
+        footer p {
+            letter-spacing: 0.3px;
+        }
+
+        /* Selector de idioma */
+        .idioma-switch {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 18px;
+        }
+
+        .idioma-btn {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.35);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .idioma-btn:hover,
+        .idioma-btn.activo {
+            background: var(--oro-teya);
+            border-color: var(--oro-teya);
+            color: white;
+        }
+
+        @media (max-width: 991px) {
+            .hero {
+                min-height: 76vh;
+            }
+
+            .hero-content {
+                max-width: 100%;
+            }
+
+            .bloque-presentacion img {
+                min-height: 280px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .top-bar-content {
+                justify-content: center;
+                text-align: center;
+            }
+
+            .navbar-brand {
+                font-size: 1.6rem;
+            }
+
+            .hero {
+                min-height: 72vh;
+            }
+
+            .hero-content {
+                padding: 1.5rem;
+            }
+
+            .card-media,
+            .card-placeholder {
+                min-height: 220px;
+            }
+
+            .bloque-presentacion img {
+                min-height: 240px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- BARRA SUPERIOR -->
+    <div class="top-bar">
+        <div class="container top-bar-content">
+            <div class="top-item">
+                🕒 <strong data-i18n="horario_label">Horario:</strong>
+                <span data-i18n="horario_texto">Lunes a Domingo | 10:00 a.m. – 4:00 p.m.</span>
+            </div>
+            <div class="top-item">
+                📞 <strong data-i18n="contacto_label">Contacto:</strong>
+                <span>+52 1 999 335 9723 | +1 (236) 339-0766</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- BARRA DE NAVEGACIÓN -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{% url 'index' %}">HACIENDA TEYA</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menuPrincipal">
+                <div class="navbar-nav ms-auto align-items-lg-center">
+                    <a class="nav-link active" href="{% url 'index' %}" data-i18n="nav_inicio">Inicio</a>
+
+                    <div class="idioma-switch ms-lg-3 mt-3 mt-lg-0">
+                        <button type="button" class="idioma-btn activo" data-lang="es">ES</button>
+                        <button type="button" class="idioma-btn" data-lang="en">EN</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO / PORTADA -->
+    <header class="hero">
+        {% if portada and portada.video_principal %}
+            <video class="hero-media" autoplay muted loop playsinline>
+                <source src="{{ portada.video_principal.url }}" type="video/mp4">
+            </video>
+        {% elif portada and portada.foto_portada %}
+            <img src="{{ portada.foto_portada.url }}" alt="Portada del Jardín Botánico" class="hero-media">
+        {% else %}
+            <div class="hero-media" style="background:
+                linear-gradient(rgba(0,0,0,0.45), rgba(0,0,0,0.45)),
+                url('https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80');
+                background-size: cover;
+                background-position: center;">
+            </div>
+        {% endif %}
+
+        <div class="hero-overlay"></div>
+
+        <div class="container hero-content">
+            <small class="d-inline-block mb-3 px-3 py-2" style="
+                background: rgba(255,255,255,0.12);
+                border: 1px solid rgba(255,255,255,0.18);
+                border-radius: 999px;
+                letter-spacing: 1px;
+                font-weight: 700;
+                text-transform: uppercase;
+                backdrop-filter: blur(3px);
+            " data-i18n="hero_badge">
+                Hacienda Teya · Recorrido natural
+            </small>
+
+            <h1 data-i18n="hero_titulo">Jardín Botánico de Hacienda Teya</h1>
+
+            <p class="mb-4" data-i18n="hero_texto">
+                Explora la biodiversidad, los recorridos y las principales áreas de exhibición
+                de este entorno natural único.
+            </p>
+
+            <a href="https://www.google.com/maps/search/?api=1&query=Jard%C3%ADn+Bot%C3%A1nico+de+Teya" target="_blank" class="btn-ubicacion" data-i18n="hero_boton">
+                📍 VER UBICACIÓN
+            </a>
+        </div>
+    </header>
+
+    <!-- SECCIÓN DE PRESENTACIÓN -->
+    <section class="container my-5">
+        <div class="row g-0 bloque-presentacion align-items-center">
+            <div class="col-md-6">
+                {% if portada and portada.foto_portada %}
+                    <img src="{{ portada.foto_portada.url }}" alt="Vista principal del jardín">
+                {% else %}
+                    <img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1200&q=80" alt="Vista del jardín">
+                {% endif %}
+            </div>
+            <div class="col-md-6 p-4 p-lg-5 text-center d-flex align-items-center">
+                <div class="w-100">
+                    <h2 class="seccion-titulo mb-4" data-i18n="proposito_titulo">El propósito del jardín</h2>
+                    <p class="fs-5 mx-auto" style="max-width: 520px;" data-i18n="proposito_texto">
+                        Este sitio presenta las principales áreas del Jardín Botánico de Hacienda Teya,
+                        facilitando la exploración de sus espacios, galerías visuales y contenido informativo.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ÁREAS DE EXHIBICIÓN -->
+    <section class="container my-5">
+        <div class="text-center mb-5">
+            <small class="d-block etiqueta-area mb-2" data-i18n="areas_badge">Explora cada espacio</small>
+            <h2 class="seccion-titulo mb-3" data-i18n="areas_titulo">Áreas de Exhibición</h2>
+            <p class="mx-auto" style="max-width: 720px; color: var(--texto-suave);" data-i18n="areas_texto">
+                Conoce algunas de las principales secciones del Jardín Botánico,
+                cada una con contenido visual, descripciones informativas y material multimedia.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            {% for s in secciones %}
+            <div class="col-md-6 mb-4">
+                <div class="card card-jardin flex-md-row">
+                    <div class="col-md-5">
+                        {% if s.foto_portada %}
+                            <img src="{{ s.foto_portada.url }}" class="card-media" alt="{{ s.get_nombre_display }}">
+                        {% else %}
+                            <div class="card-placeholder" data-i18n="card_placeholder">Próximamente imagen de esta sección</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="col-md-7">
+                        <div class="card-body d-flex flex-column p-4 h-100">
+                            <small class="text-uppercase etiqueta-area mb-2" data-i18n="card_badge">Recorrido Teya</small>
+
+                            <h3 class="card-title mb-3"
+                                data-es="{{ s.get_nombre_display }}"
+                                data-en="{{ s.nombre_en|default:s.get_nombre_display }}"
+                                data-bilingual>
+                                {{ s.get_nombre_display }}
+                            </h3>
+
+                            <p class="card-text mb-4"
+                               data-es="{{ s.descripcion_corta|default:'Próximamente conocerás más sobre esta sección.' }}"
+                               data-en="{{ s.descripcion_corta_en|default:s.descripcion_corta }}"
+                               data-bilingual>
+                                {{ s.descripcion_corta|default:"Próximamente conocerás más sobre esta sección." }}
+                            </p>
+
+                            <div class="mt-auto d-flex align-items-center justify-content-between flex-wrap gap-2">
+                                <small style="color: var(--texto-suave); font-style: italic;" data-i18n="card_info">
+                                    Información visual disponible
+                                </small>
+
+                                <a href="{% url 'galeria_seccion' s.id %}" class="btn-teya px-4" data-i18n="card_boton">
+                                    VER GALERÍA
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p data-i18n="sin_areas">No hay áreas registradas todavía.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="py-5 text-center text-white">
+        <div class="container">
+            <p class="mb-1">© 2026 Proyecto Hacienda Teya - Avance de Desarrollo</p>
+            <small class="text-secondary">Andrick - Ingeniería de Software</small>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        const traduccionesIndex = {
+            es: {
+                nav_inicio: "Inicio",
+                horario_label: "Horario:",
+                horario_texto: "Lunes a Domingo | 10:00 a.m. – 4:00 p.m.",
+                contacto_label: "Contacto:",
+                hero_badge: "Hacienda Teya · Recorrido natural",
+                hero_titulo: "Jardín Botánico de Hacienda Teya",
+                hero_texto: "Explora la biodiversidad, los recorridos y las principales áreas de exhibición de este entorno natural único.",
+                hero_boton: "📍 VER UBICACIÓN",
+                proposito_titulo: "El propósito del jardín",
+                proposito_texto: "Este sitio presenta las principales áreas del Jardín Botánico de Hacienda Teya, facilitando la exploración de sus espacios, galerías visuales y contenido informativo.",
+                areas_badge: "Explora cada espacio",
+                areas_titulo: "Áreas de Exhibición",
+                areas_texto: "Conoce algunas de las principales secciones del Jardín Botánico, cada una con contenido visual, descripciones informativas y material multimedia.",
+                card_badge: "Recorrido Teya",
+                card_placeholder: "Próximamente imagen de esta sección",
+                card_info: "Información visual disponible",
+                card_boton: "VER GALERÍA",
+                sin_areas: "No hay áreas registradas todavía."
+            },
+            en: {
+                nav_inicio: "Home",
+                horario_label: "Hours:",
+                horario_texto: "Monday to Sunday | 10:00 a.m. – 4:00 p.m.",
+                contacto_label: "Contact:",
+                hero_badge: "Hacienda Teya · Nature tour",
+                hero_titulo: "Hacienda Teya Botanical Garden",
+                hero_texto: "Explore the biodiversity, pathways, and main exhibition areas of this unique natural environment.",
+                hero_boton: "📍 VIEW LOCATION",
+                proposito_titulo: "The garden's purpose",
+                proposito_texto: "This site presents the main areas of the Hacienda Teya Botanical Garden, making it easier to explore its spaces, visual galleries, and informative content.",
+                areas_badge: "Explore each area",
+                areas_titulo: "Exhibition Areas",
+                areas_texto: "Discover some of the main sections of the Botanical Garden, each with visual content, informative descriptions, and multimedia material.",
+                card_badge: "Teya tour",
+                card_placeholder: "Image for this section coming soon",
+                card_info: "Visual information available",
+                card_boton: "VIEW GALLERY",
+                sin_areas: "There are no registered areas yet."
+            }
+        };
+
+        function aplicarIdiomaIndex(lang) {
+            const pack = traduccionesIndex[lang] || traduccionesIndex.es;
+
+            document.querySelectorAll("[data-i18n]").forEach(el => {
+                const key = el.getAttribute("data-i18n");
+                if (pack[key]) {
+                    el.textContent = pack[key];
+                }
+            });
+
+            document.querySelectorAll("[data-bilingual]").forEach(el => {
+                const texto = lang === "en" ? el.dataset.en : el.dataset.es;
+
+                if (texto && texto.trim() !== "") {
+                    el.textContent = texto;
+                }
+            });
+
+            document.documentElement.lang = lang === "en" ? "en" : "es";
+
+            document.querySelectorAll(".idioma-btn").forEach(btn => {
+                btn.classList.toggle("activo", btn.dataset.lang === lang);
+            });
+
+            localStorage.setItem("teya_lang", lang);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const idiomaGuardado = localStorage.getItem("teya_lang") || "es";
+            aplicarIdiomaIndex(idiomaGuardado);
+
+            document.querySelectorAll(".idioma-btn").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    aplicarIdiomaIndex(btn.dataset.lang);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+

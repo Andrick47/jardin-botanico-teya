@@ -1,0 +1,20 @@
+services:
+  teya-web:
+    build: .
+    container_name: teya-web
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./media:/app/media
+      - ./db.sqlite3:/app/db.sqlite3
+    ports:
+      - "8000:8000"
+    networks:
+      - npm_proxy
+
+networks:
+  npm_proxy:
+    external: true
+
+    

@@ -1,0 +1,404 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ seccion.get_nombre_display }} | Ficha de sección</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/lightbox2@2/dist/css/lightbox.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --verde-teya: #2d5a27;
+            --oro-teya: #c5a059;
+            --crema-teya: #fdfcf0;
+        }
+
+        body {
+            background-color: var(--crema-teya);
+            font-family: 'Georgia', serif;
+        }
+
+        .navbar {
+            background-color: var(--verde-teya);
+            border-bottom: 3px solid var(--oro-teya);
+        }
+
+        .navbar-brand {
+            font-size: 2rem;
+            letter-spacing: 1px;
+        }
+
+        .nav-link {
+            color: rgba(255,255,255,0.85) !important;
+            font-weight: 600;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #fff !important;
+        }
+
+        /* Selector de idioma */
+        .idioma-switch {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 18px;
+        }
+
+        .idioma-btn {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.35);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .idioma-btn:hover,
+        .idioma-btn.activo {
+            background: var(--oro-teya);
+            border-color: var(--oro-teya);
+            color: white;
+        }
+
+        .hero-mini {
+            position: relative;
+            min-height: 42vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 2rem;
+        }
+
+        .hero-title {
+            font-size: clamp(2.2rem, 5vw, 4.5rem);
+            font-weight: bold;
+        }
+
+        .contenido-box {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            padding: 2rem;
+        }
+
+        .titulo-seccion {
+            color: var(--verde-teya);
+            font-size: 2.2rem;
+        }
+
+        .texto-detallado p {
+            font-size: 1.08rem;
+            line-height: 1.9;
+            color: #333;
+        }
+
+        .btn-teya {
+            background-color: var(--verde-teya);
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            display: inline-block;
+            font-weight: bold;
+            border-radius: 6px;
+            transition: 0.3s;
+        }
+
+        .btn-teya:hover {
+            background-color: var(--oro-teya);
+            color: white;
+        }
+
+        .btn-puente {
+            background-color: #5fbf4a;
+            color: white;
+            text-decoration: none;
+            padding: 16px 28px;
+            display: inline-block;
+            font-weight: bold;
+            border-radius: 14px;
+            transition: 0.3s;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+        }
+
+        .btn-puente:hover {
+            background-color: #4ea93b;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .card-foto {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            background: white;
+            height: 100%;
+        }
+
+        .card-foto a {
+            display: block;
+            overflow: hidden;
+        }
+
+        .card-foto img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        .card-foto:hover img {
+            transform: scale(1.06);
+        }
+
+        .video-box video {
+            width: 100%;
+            max-height: 520px;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            background: #000;
+        }
+
+        .separador {
+            width: 180px;
+            height: 5px;
+            background-color: var(--verde-teya);
+            margin: 0 auto 2rem auto;
+            border-radius: 999px;
+        }
+
+        /* Ocultar elementos de respaldo */
+        .d-none {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{% url 'index' %}">HACIENDA TEYA</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuGaleria">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menuGaleria">
+                <div class="navbar-nav ms-auto align-items-lg-center">
+                    <a class="nav-link" href="{% url 'index' %}" data-i18n="nav_inicio">Inicio</a>
+                    <a class="nav-link active" href="#" data-i18n="nav_galeria">Galería</a>
+
+                    <div class="idioma-switch ms-lg-3 mt-3 mt-lg-0">
+                        <button type="button" class="idioma-btn activo" data-lang="es">ES</button>
+                        <button type="button" class="idioma-btn" data-lang="en">EN</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero-mini">
+        {% if seccion.foto_portada %}
+            <img src="{{ seccion.foto_portada.url }}" alt="{{ seccion.get_nombre_display }}" class="hero-bg">
+        {% else %}
+            <img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=1400&q=80" alt="Fondo" class="hero-bg">
+        {% endif %}
+        <div class="hero-overlay"></div>
+        <div class="hero-content container">
+            <h1 class="hero-title"
+                data-es="{{ seccion.get_nombre_display }}"
+                data-en="{{ seccion.nombre_en|default:seccion.get_nombre_display }}"
+                data-bilingual>
+                {{ seccion.get_nombre_display }}
+            </h1>
+        </div>
+    </header>
+
+    <section class="container py-5">
+        <div class="separador"></div>
+
+        <div class="contenido-box mb-5">
+            <div class="row align-items-start g-4">
+                <div class="col-lg-8">
+                    <h2 class="titulo-seccion mb-3" data-i18n="desc_titulo">Descripción de la sección</h2>
+
+                    <!-- Div visible que se actualizará con JavaScript -->
+                    <div class="texto-detallado" data-bilingual-html>
+                        {{ seccion.descripcion_detallada|linebreaks }}
+                    </div>
+
+                    <!-- Respaldos ocultos para cambiar idioma -->
+                    <div id="descripcion-es" class="d-none">
+                        {{ seccion.descripcion_detallada|linebreaks }}
+                    </div>
+
+                    <div id="descripcion-en" class="d-none">
+                        {{ seccion.descripcion_detallada_en|default:seccion.descripcion_detallada|linebreaks }}
+                    </div>
+                </div>
+
+                <div class="col-lg-4 text-lg-end text-start">
+                    <a href="{% url 'index' %}" class="btn-teya mb-3" data-i18n="volver_inicio">← Volver al inicio</a>
+                    <br>
+
+                    {% if seccion.enlace_seccion_completa %}
+                        <a href="{{ seccion.enlace_seccion_completa }}" class="btn-puente" target="_blank" data-i18n="ver_seccion_completa">
+                            Ver sección completa →
+                        </a>
+                    {% else %}
+                        <button class="btn-puente" disabled style="opacity: 0.7; cursor: not-allowed;" data-i18n="seccion_proximamente">
+                            Sección completa próximamente
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {% if seccion.video_principal %}
+        <div class="mb-5">
+            <h3 class="titulo-seccion mb-3" data-i18n="video_principal">Video principal</h3>
+            <div class="video-box">
+                <video controls>
+                    <source src="{{ seccion.video_principal.url }}" type="video/mp4">
+                    <span data-i18n="navegador_video">Tu navegador no soporta video.</span>
+                </video>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="mb-4">
+            <h3 class="titulo-seccion" data-i18n="galeria_fotografica">Galería fotográfica</h3>
+        </div>
+
+        <div class="row">
+            {% for foto in fotos %}
+            <div class="col-md-4 mb-4">
+                <div class="card-foto">
+                    <a href="{{ foto.imagen.url }}" data-lightbox="galeria" data-title="{{ seccion.get_nombre_display }}">
+                        <img src="{{ foto.imagen.url }}" alt="Imagen de {{ seccion.get_nombre_display }}">
+                    </a>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p class="fs-5 text-muted" data-i18n="sin_imagenes">Aún no hay imágenes cargadas para esta sección.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lightbox2@2/dist/js/lightbox.min.js"></script>
+
+    <script>
+        const traduccionesGaleria = {
+            es: {
+                nav_inicio: "Inicio",
+                nav_galeria: "Galería",
+                desc_titulo: "Descripción de la sección",
+                volver_inicio: "← Volver al inicio",
+                ver_seccion_completa: "Ver sección completa →",
+                seccion_proximamente: "Sección completa próximamente",
+                video_principal: "Video principal",
+                navegador_video: "Tu navegador no soporta video.",
+                galeria_fotografica: "Galería fotográfica",
+                sin_imagenes: "Aún no hay imágenes cargadas para esta sección."
+            },
+            en: {
+                nav_inicio: "Home",
+                nav_galeria: "Gallery",
+                desc_titulo: "Section description",
+                volver_inicio: "← Back to home",
+                ver_seccion_completa: "View full section →",
+                seccion_proximamente: "Full section coming soon",
+                video_principal: "Main video",
+                navegador_video: "Your browser does not support video.",
+                galeria_fotografica: "Photo gallery",
+                sin_imagenes: "There are no images uploaded for this section yet."
+            }
+        };
+
+        function aplicarIdiomaGaleria(lang) {
+            const pack = traduccionesGaleria[lang] || traduccionesGaleria.es;
+
+            document.querySelectorAll("[data-i18n]").forEach(el => {
+                const key = el.getAttribute("data-i18n");
+                if (pack[key]) {
+                    el.textContent = pack[key];
+                }
+            });
+
+            document.querySelectorAll("[data-bilingual]").forEach(el => {
+                const texto = lang === "en" ? el.dataset.en : el.dataset.es;
+
+                if (texto && texto.trim() !== "") {
+                    el.textContent = texto;
+                }
+            });
+
+            document.querySelectorAll("[data-bilingual-html]").forEach(el => {
+                const fuente = lang === "en"
+                    ? document.getElementById("descripcion-en")
+                    : document.getElementById("descripcion-es");
+
+                if (fuente && fuente.innerHTML.trim() !== "") {
+                    el.innerHTML = fuente.innerHTML;
+                }
+            });
+
+            document.documentElement.lang = lang === "en" ? "en" : "es";
+
+            document.querySelectorAll(".idioma-btn").forEach(btn => {
+                btn.classList.toggle("activo", btn.dataset.lang === lang);
+            });
+
+            localStorage.setItem("teya_lang", lang);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const idiomaGuardado = localStorage.getItem("teya_lang") || "es";
+            aplicarIdiomaGaleria(idiomaGuardado);
+
+            document.querySelectorAll(".idioma-btn").forEach(btn => {
+                btn.addEventListener("click", () => {
+                    aplicarIdiomaGaleria(btn.dataset.lang);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+

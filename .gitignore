@@ -1,0 +1,33 @@
+# Entorno virtual
+env/
+venv/
+
+# Variables privadas
+.env
+
+# Base de datos local
+db.sqlite3
+
+# Archivos subidos por usuarios/clientes
+media/
+
+# Caché de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Migraciones cache
+*.pyc
+
+# Archivos estáticos generados
+staticfiles/
+
+# Sistema / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs
+*.log
+
