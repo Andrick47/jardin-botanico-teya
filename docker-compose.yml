@@ -6,9 +6,14 @@ services:
     env_file:
       - .env
     volumes:
+      - ./data:/app/data
       - ./media:/app/media
-      - ./db.sqlite3:/app/db.sqlite3
     ports:
       - "8000:8000"
+    networks:
+      - npm_proxy
 
-      
+networks:
+  npm_proxy:
+    external: true
+    
