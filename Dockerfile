@@ -5,9 +5,6 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y \
-    && rm -rf /var/lib/apt/lists/*
-
 COPY requirements.txt /app/
 
 RUN pip install --upgrade pip
@@ -21,5 +18,7 @@ EXPOSE 8000
 
 COPY entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
+RUN adduser --disabled-password --gecos "" appuser && \
+    chown -R appuser:appuser /app
+USER appuser
 CMD ["/app/entrypoint.sh"]
-
